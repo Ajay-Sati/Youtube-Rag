@@ -1,0 +1,8 @@
+streamlit
+google-generativeai
+youtube-transcript-api==1.2.2
+langchain
+langchain-google-genai
+langchain-chroma
+python-dotenv
+google-genai
