@@ -2,6 +2,8 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
+import time
+from youtube_transcript_api import YouTubeTranscriptApi
 from applications import (
     extract_video_id,
     get_transcript,
@@ -19,9 +21,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
-
-
 
 
 # --- Sidebar ---
@@ -58,11 +57,9 @@ if submit_button:
         st.success(video_id)
         if video_id:
             with st.spinner("Step 1/5: Fetching transcript... 📜"):
-                import time
-                from youtube_transcript_api import YouTubeTranscriptApi
                 ytt_api = YouTubeTranscriptApi()
                 try:
-                    transcript = ytt_api.fetch(video_id, languages=language)
+                    transcript = ytt_api.fetch(video_id, languages=[language])
                     print(transcript)
                     time.sleep(10)  # wait 5 seconds between requests
                 except Exception as e:
