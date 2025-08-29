@@ -54,7 +54,7 @@ def get_transcript(video_id, language):
     try:
         transcript = ytt_api.fetch(video_id, languages=[language])
         full_transcript = " ".join([i.text for i in transcript])
-        time.sleep(10)  # wait 5 seconds between requests
+        time.sleep(15)  # wait 15 seconds between requests
         return full_transcript
     except Exception as e:
         st.error(f"Error fetching {video_id}: {e}")
@@ -226,6 +226,7 @@ def rag_answer(question, vectorstore):
     # Run chain
     response = chain.invoke({"context": context_text, "question": question})
     return response.content
+
 
 
 
