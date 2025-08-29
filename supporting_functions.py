@@ -44,26 +44,19 @@ def extract_video_id(url):
 
 # function to get summary transcript from the video.
 def get_transcript(video_id, language):
-    """
-    Fetches the transcript for a given video ID using a proxy if available.
-    """
+    ytt_api = YouTubeTranscriptApi(
+    proxy_config=WebshareProxyConfig(
+        proxy_username="uovoumor",
+        proxy_password="udk28jufv40l",
+    )
+)
     try:
-        # Securely get the proxy URL from Streamlit's secrets
-        proxy_url = st.secrets.get("PROXY_URL")
-        proxies = {"http": proxy_url, "https": proxy_url} if proxy_url else None
-
-        # Corrected method: Use list_transcripts to find the desired language, then fetch it.
-        transcript_list_obj = YouTubeTranscriptApi.list_transcripts(video_id, proxies=proxies)
-        transcript = transcript_list_obj.find_transcript([language])
-        transcript_list = transcript.fetch()
-        
-        full_transcript = " ".join([item['text'] for item in transcript_list])
-        time.sleep(2)  # A small delay to be polite
+        transcript = ytt_api.fetch(video_id, languages=[language])
+        full_transcript = " ".join([i.text for i in transcript])
+        time.sleep(30)  # wait 15 seconds between requests
         return full_transcript
     except Exception as e:
-        st.error(f"Error fetching transcript: {e}")
-        return None
-
+        st.error(f"Error fetching {video_id}: {e}")
 
 # Initialize Gemini model via LangChain
 llm = ChatGoogleGenerativeAI(
@@ -231,6 +224,7 @@ def rag_answer(question, vectorstore):
     # Run chain
     response = chain.invoke({"context": context_text, "question": question})
     return response.content
+
 
 
 
