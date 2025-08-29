@@ -33,7 +33,8 @@ with st.sidebar:
 
     submit_button = st.button("✨ Start Processing")
     st.markdown("---")
-    st.session_state.messages = []
+    if st.button("New Chat"):
+        st.session_state.messages = []
 
 # --- Main Page ---
 st.title("YouTube Content Synthesizer")
@@ -99,5 +100,6 @@ if task_option == "Chat with Video" and "vectorstore" in st.session_state:
             st.write(response)
 
         st.session_state.messages.append({"role": "assistant", "content": response})
+
 
 
