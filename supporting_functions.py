@@ -52,9 +52,8 @@ def get_transcript(video_id, language):
         proxy_url = st.secrets.get("PROXY_URL")
         proxies = {"http": proxy_url, "https": proxy_url} if proxy_url else None
 
-        # The proxies argument should be passed to the get_transcript method.
-        ytt_api = YouTubeTranscriptApi()
-        transcript_list = ytt_api.get_transcript(video_id, languages=[language], proxies=proxies)
+        # Correctly call get_transcript as a static method on the class
+        transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=[language], proxies=proxies)
         
         full_transcript = " ".join([item['text'] for item in transcript_list])
         time.sleep(2)  # A small delay to be polite
@@ -229,6 +228,7 @@ def rag_answer(question, vectorstore):
     # Run chain
     response = chain.invoke({"context": context_text, "question": question})
     return response.content
+
 
 
 
