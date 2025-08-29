@@ -52,8 +52,10 @@ def get_transcript(video_id, language):
         proxy_url = st.secrets.get("PROXY_URL")
         proxies = {"http": proxy_url, "https": proxy_url} if proxy_url else None
 
-        # Correctly call get_transcript as a static method on the class
-        transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=[language], proxies=proxies)
+        # Corrected method: Use list_transcripts to find the desired language, then fetch it.
+        transcript_list_obj = YouTubeTranscriptApi.list_transcripts(video_id, proxies=proxies)
+        transcript = transcript_list_obj.find_transcript([language])
+        transcript_list = transcript.fetch()
         
         full_transcript = " ".join([item['text'] for item in transcript_list])
         time.sleep(2)  # A small delay to be polite
@@ -61,6 +63,7 @@ def get_transcript(video_id, language):
     except Exception as e:
         st.error(f"Error fetching transcript: {e}")
         return None
+
 
 # Initialize Gemini model via LangChain
 llm = ChatGoogleGenerativeAI(
@@ -228,6 +231,7 @@ def rag_answer(question, vectorstore):
     # Run chain
     response = chain.invoke({"context": context_text, "question": question})
     return response.content
+
 
 
 
