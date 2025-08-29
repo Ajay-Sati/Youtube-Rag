@@ -1,5 +1,10 @@
 import streamlit as st
 
+
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 from supporting_functions import (
     extract_video_id,
     get_transcript,
@@ -95,3 +100,4 @@ if task_option == "Chat with Video" and "vectorstore" in st.session_state:
             st.write(response)
 
         st.session_state.messages.append({"role": "assistant", "content": response})
+
