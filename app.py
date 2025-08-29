@@ -1,10 +1,5 @@
 import streamlit as st
 
-
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
 from supporting_functions import (
     extract_video_id,
     get_transcript,
@@ -33,8 +28,7 @@ with st.sidebar:
 
     submit_button = st.button("✨ Start Processing")
     st.markdown("---")
-    if st.button("New Chat"):
-        st.session_state.messages = []
+    # The "New Chat" button has been removed from here.
 
 # --- Main Page ---
 st.title("YouTube Content Synthesizer")
@@ -62,6 +56,7 @@ if submit_button:
                     vectorstore = create_vector_store(chunks)
                     st.session_state.vectorstore = vectorstore
 
+                # Initialize a new chat session for the processed video
                 st.session_state.messages = []
                 st.success("✅ Video ready for chat! Scroll down to start chatting.")
 
@@ -83,7 +78,7 @@ if task_option == "Chat with Video" and "vectorstore" in st.session_state:
     st.divider()
     st.subheader("💬 Chat with the Video")
 
-    # Display chat history
+    # Display chat history. Using .get() ensures it works on the first run
     for message in st.session_state.get("messages", []):
         with st.chat_message(message["role"]):
             st.write(message["content"])
@@ -100,6 +95,3 @@ if task_option == "Chat with Video" and "vectorstore" in st.session_state:
             st.write(response)
 
         st.session_state.messages.append({"role": "assistant", "content": response})
-
-
-
