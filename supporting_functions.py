@@ -49,22 +49,21 @@ import time
 import os # Make sure to import os
 
 def get_transcript(video_id, language):
-    # Define your proxy settings
-    proxies = {
-       "http": "http://uovoumor:udk28jufv40l@23.95.150.145:6114/",
-       "https": "http://uovoumor:udk28jufv40l@23.95.150.145:6114/"
-    }
-
+    """
+    Fetches the transcript for a given video ID using a proxy if available.
+    """
     try:
-        # Pass the proxies dictionary during initialization
+        # Securely get the proxy URL from Streamlit's secrets
+        proxy_url = st.secrets.get("PROXY_URL")
+        proxies = {"http": proxy_url, "https": proxy_url} if proxy_url else None
+
         ytt_api = YouTubeTranscriptApi(proxies=proxies)
-        
         transcript_list = ytt_api.get_transcript(video_id, languages=[language])
         full_transcript = " ".join([item['text'] for item in transcript_list])
-        time.sleep(10) # wait 10 seconds between requests
+        time.sleep(2)  # A small delay to be polite
         return full_transcript
     except Exception as e:
-        st.error(f"Error fetching transcript via proxy: {e}")
+        st.error(f"Error fetching transcript: {e}")
         return None
 
 # Initialize Gemini model via LangChain
