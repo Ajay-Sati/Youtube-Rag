@@ -3,6 +3,7 @@ import re
 import time
 import streamlit as st
 from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.proxies import WebshareProxyConfig
 
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -43,7 +44,13 @@ def extract_video_id(url):
 
 # function to get summary transcript from the video.
 def get_transcript(video_id, language):
-    ytt_api = YouTubeTranscriptApi()
+    ytt_api = YouTubeTranscriptApi(
+    proxy_config=WebshareProxyConfig(
+        proxy_username="uovoumor",
+        proxy_password="udk28jufv40l",
+    )
+)
+
     try:
         transcript = ytt_api.fetch(video_id, languages=[language])
         full_transcript = " ".join([i.text for i in transcript])
@@ -219,6 +226,7 @@ def rag_answer(question, vectorstore):
     # Run chain
     response = chain.invoke({"context": context_text, "question": question})
     return response.content
+
 
 
 
