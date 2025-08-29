@@ -43,11 +43,6 @@ def extract_video_id(url):
     return None
 
 # function to get summary transcript from the video.
-from youtube_transcript_api import YouTubeTranscriptApi
-import streamlit as st
-import time
-import os # Make sure to import os
-
 def get_transcript(video_id, language):
     """
     Fetches the transcript for a given video ID using a proxy if available.
@@ -57,8 +52,10 @@ def get_transcript(video_id, language):
         proxy_url = st.secrets.get("PROXY_URL")
         proxies = {"http": proxy_url, "https": proxy_url} if proxy_url else None
 
-        ytt_api = YouTubeTranscriptApi(proxies=proxies)
-        transcript_list = ytt_api.get_transcript(video_id, languages=[language])
+        # The proxies argument should be passed to the get_transcript method.
+        ytt_api = YouTubeTranscriptApi()
+        transcript_list = ytt_api.get_transcript(video_id, languages=[language], proxies=proxies)
+        
         full_transcript = " ".join([item['text'] for item in transcript_list])
         time.sleep(2)  # A small delay to be polite
         return full_transcript
@@ -232,6 +229,7 @@ def rag_answer(question, vectorstore):
     # Run chain
     response = chain.invoke({"context": context_text, "question": question})
     return response.content
+
 
 
 
