@@ -6,11 +6,17 @@ The app extracts the video ID, fetches the transcript, builds a video-specific v
 
 #### Features
 Paste YouTube URL → Auto extract Video ID
+
 Fetches transcript & creates a vector database automatically
+
 Chat with the video (RAG-based Q&A)
+
 Generate smart summaries
+
 Generate topic-wise notes
+
 Fast, accurate retrieval
+
 Supports long videos
 
 #### How It Works
