@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Cursor IDE
+.cursor/
+
+# Logs
+*.log
+debug.log
